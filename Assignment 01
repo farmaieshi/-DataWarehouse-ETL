@@ -1,28 +1,51 @@
+
+Assignment 1
+------------
+
+This script reads fact.csv and splits it into three different files:
+cpu_fact.csv
+gpu_fact.csv
+ram_fact.csv
+
+We only use basic python libraries (csv) because pandas is forbidden.
+"""
+
 import csv
-import os
 
 
-INPUT_FILE = "../data/fact.csv"
-
-CPU_FILE = "../data/cpu_fact.csv"
-GPU_FILE = "../data/gpu_fact.csv"
-RAM_FILE = "../data/ram_fact.csv"
+# Path to the original fact file
+FACT_FILE = "fact.csv"
 
 
-def split_fact():
+# Output files
+CPU_FILE = "cpu_fact.csv"
+GPU_FILE = "gpu_fact.csv"
+RAM_FILE = "ram_fact.csv"
 
-    with open(INPUT_FILE, "r", encoding="utf-8") as f:
 
-        reader = csv.DictReader(f)
+def split_fact_table():
+    """
+    This function reads fact.csv row by row and splits the rows
+    depending on which product code is present (cpu, gpu, ram).
+    """
 
-        cpu_out = open(CPU_FILE, "w", newline="")
-        gpu_out = open(GPU_FILE, "w", newline="")
-        ram_out = open(RAM_FILE, "w", newline="")
+    # Open the input fact file
+    with open(FACT_FILE, "r", encoding="utf-8") as fact:
 
+        # DictReader lets us access columns by name
+        reader = csv.DictReader(fact)
+
+        # Open output files
+        cpu_out = open(CPU_FILE, "w", newline="", encoding="utf-8")
+        gpu_out = open(GPU_FILE, "w", newline="", encoding="utf-8")
+        ram_out = open(RAM_FILE, "w", newline="", encoding="utf-8")
+
+        # CSV writers
         cpu_writer = csv.writer(cpu_out)
         gpu_writer = csv.writer(gpu_out)
         ram_writer = csv.writer(ram_out)
 
+        # Write headers
         header = [
             "product_code",
             "time_code",
@@ -36,19 +59,12 @@ def split_fact():
         gpu_writer.writerow(header)
         ram_writer.writerow(header)
 
+        # Process each row
         for row in reader:
 
-            if row["cpu_code"]:
-                cpu_writer.writerow([
-                    row["cpu_code"],
-                    row["time_code"],
-                    row["geo_code"],
-                    row["vendor_code"],
-                    row["sales_uds"],
-                    row["sales_currency"]
-                ])
+            # If gpu_code exists → GPU table
+            if row["gpu_code"]:
 
-            elif row["gpu_code"]:
                 gpu_writer.writerow([
                     row["gpu_code"],
                     row["time_code"],
@@ -58,7 +74,21 @@ def split_fact():
                     row["sales_currency"]
                 ])
 
+            # If cpu_code exists → CPU table
+            elif row["cpu_code"]:
+
+                cpu_writer.writerow([
+                    row["cpu_code"],
+                    row["time_code"],
+                    row["geo_code"],
+                    row["vendor_code"],
+                    row["sales_uds"],
+                    row["sales_currency"]
+                ])
+
+            # If ram_code exists → RAM table
             elif row["ram_code"]:
+
                 ram_writer.writerow([
                     row["ram_code"],
                     row["time_code"],
@@ -68,10 +98,12 @@ def split_fact():
                     row["sales_currency"]
                 ])
 
+        # Close files
         cpu_out.close()
         gpu_out.close()
         ram_out.close()
 
 
+# Run the script
 if __name__ == "__main__":
-    split_fact()
+    split_fact_table()
