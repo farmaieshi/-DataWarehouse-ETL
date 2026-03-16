@@ -1,0 +1,137 @@
+-- ==========================================
+-- Assignment 0
+-- Create Hardware Market Data Warehouse
+-- ==========================================
+
+-- 1️⃣ Create the database
+CREATE DATABASE Group26HWMart;
+GO
+
+-- Use the database
+USE Group26HWMart;
+GO
+
+
+-- ==========================================
+-- 2️⃣ Create Dimension Tables
+-- ==========================================
+
+-- Vendor dimension
+CREATE TABLE vendor (
+    vendor_code INT PRIMARY KEY,
+    vendor_name VARCHAR(100)
+);
+
+-- Geography dimension
+CREATE TABLE geo (
+    geo_code INT PRIMARY KEY,
+    country VARCHAR(100),
+    region VARCHAR(100)
+);
+
+-- Time dimension
+CREATE TABLE time (
+    time_code INT PRIMARY KEY,
+    year INT,
+    month INT,
+    day INT,
+    week INT,
+    quarter VARCHAR(2),
+    day_of_week VARCHAR(10)
+);
+
+-- Product dimension: GPU
+CREATE TABLE gpu (
+    gpu_code INT PRIMARY KEY,
+    gpu_name VARCHAR(100)
+);
+
+-- Product dimension: CPU
+CREATE TABLE cpu (
+    cpu_code INT PRIMARY KEY,
+    cpu_name VARCHAR(100)
+);
+
+-- Product dimension: RAM
+CREATE TABLE ram (
+    ram_code INT PRIMARY KEY,
+    ram_name VARCHAR(100)
+);
+
+
+-- ==========================================
+-- 3️⃣ Create Fact Tables
+-- ==========================================
+
+-- GPU sales fact table
+CREATE TABLE gpu_sales (
+
+    gpu_code INT,
+    time_code INT,
+    geo_code INT,
+    vendor_code INT,
+    sales_uds INT,
+    sales_currency FLOAT,
+
+    CONSTRAINT fk_gpu
+        FOREIGN KEY (gpu_code) REFERENCES gpu(gpu_code),
+
+    CONSTRAINT fk_gpu_time
+        FOREIGN KEY (time_code) REFERENCES time(time_code),
+
+    CONSTRAINT fk_gpu_geo
+        FOREIGN KEY (geo_code) REFERENCES geo(geo_code),
+
+    CONSTRAINT fk_gpu_vendor
+        FOREIGN KEY (vendor_code) REFERENCES vendor(vendor_code)
+);
+
+
+
+-- CPU sales fact table
+CREATE TABLE cpu_sales (
+
+    cpu_code INT,
+    time_code INT,
+    geo_code INT,
+    vendor_code INT,
+    sales_uds INT,
+    sales_currency FLOAT,
+
+    CONSTRAINT fk_cpu
+        FOREIGN KEY (cpu_code) REFERENCES cpu(cpu_code),
+
+    CONSTRAINT fk_cpu_time
+        FOREIGN KEY (time_code) REFERENCES time(time_code),
+
+    CONSTRAINT fk_cpu_geo
+        FOREIGN KEY (geo_code) REFERENCES geo(geo_code),
+
+    CONSTRAINT fk_cpu_vendor
+        FOREIGN KEY (vendor_code) REFERENCES vendor(vendor_code)
+);
+
+
+
+-- RAM sales fact table
+CREATE TABLE ram_sales (
+
+    ram_code INT,
+    time_code INT,
+    geo_code INT,
+    vendor_code INT,
+    sales_uds INT,
+    sales_currency FLOAT,
+
+    CONSTRAINT fk_ram
+        FOREIGN KEY (ram_code) REFERENCES ram(ram_code),
+
+    CONSTRAINT fk_ram_time
+        FOREIGN KEY (time_code) REFERENCES time(time_code),
+
+    CONSTRAINT fk_ram_geo
+        FOREIGN KEY (geo_code) REFERENCES geo(geo_code),
+
+    CONSTRAINT fk_ram_vendor
+        FOREIGN KEY (vendor_code) REFERENCES vendor(vendor_code)
+);
