@@ -1,0 +1,23 @@
+hardware-datawarehouse-etl
+│
+├── data
+│   ├── fact.csv
+│   ├── cpu.csv
+│   ├── gpu.csv
+│   ├── ram.csv
+│   ├── geo.csv
+│   ├── vendor.csv
+│   └── time.csv
+│
+├── sql
+│   └── create_dw_schema.sql
+│
+├── etl
+│   ├── split_fact.py
+│   └── load_datawarehouse.py
+│
+├── report
+│   └── project_report.pdf
+│
+├── requirements.txt
+└── README.md
