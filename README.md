@@ -1,4 +1,4 @@
-# Hardware Market DataWarehouse ETL
+# DataWarehouse - ETL
 Data Warehouse design and ETL pipeline for hardware market sales data using Python and SQL Server.
 This project implements a Data Warehouse for hardware market sales data.
 
